@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+    <!--AFrame version 1.8.0-->
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+    <!-- AFrame Troika Text -->
+    <script src="https://unpkg.com/aframe-troika-text/dist/aframe-troika-text.min.js"></script>
+    <!-- AFrame Orbit Control -->
+    <script src="https://unpkg.com/aframe-orbit-controls@1.3.2/dist/aframe-orbit-controls.min.js"></script>
+    <!--D3.js-->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/mqtt@4.3.7/dist/mqtt.min.js"></script>
+    <!-- Custom components - must load AFTER AFrame -->
+    <script src="./resources/js/custom-components.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="resources/css/pure-drawer.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css" />
+  </head>
+
+  <body>
+    <div class="pure-container" data-effect="pure-effect-slide">
+      <input type="checkbox" id="pure-toggle-left" class="pure-toggle" data-toggle="left" />
+      <label class="pure-toggle-label" for="pure-toggle-left" data-toggle-label="left">
+        <span class="pure-toggle-icon"></span>
+      </label>
+
+      <nav class="pure-drawer" data-position="left">
+        <div class="container-content">
+          <p class="title-menu">Pi<span class="red-text"> Cloud</span></p>
+          <p class="subtitle-menu">A WebXR Dashboard for CE PiCloud via MQTT</p>
+          <p id="ip_hostname" class="content-menu">PiName: </p>
+          <p id="cpu_percent" class="content-menu">CPU %: </p>
+          <p id="ping_ms" class="content-menu">Ping ms: </p>
+          <p id="temp" class="content-menu">Temperature: </p>
+          <p id="heartbeat" class="content-menu">Last seen online: </p>
+          <p class="credit">Built by Namita</p>
+        </div>
+      </nav>
+
+      <div class="pure-pusher-container">
+        <div class="pure-pusher">
+
+          <a-scene
+                    pi-cloud-data
+                    cursor="rayOrigin: mouse"
+                    raycaster="objects: .collidable"
+                    renderer="antialias: true;
+                    colorManagement: true;
+                    sortTransparentObjects: true;">
+
+            <a-assets>
+              <img id="sky" src="./resources/imgs/celab.webp" />
+              <a-asset-item id="PiFrame" src="resources/models/Picloud_FrameDraco.glb"></a-asset-item>
+              <a-asset-item id="PiRpis" src="resources/models/Picloud_RpisDraco.glb"></a-asset-item>
+            </a-assets>
+
+            <a-entity id="container" position="0 0 -0.03" rotation="0 90 180">
+
+              <a-troika-text id="title" value="PiCloud" color="orange" stroke-color="white"
+                stroke-width="0.001" font-size="0.05" outline-blur="0.05" letter-spacing="0.1"
+                width="1" anchor="center" position="0 -0.12 0" rotation="0 0 180"></a-troika-text>
+
+              <a-entity id="_piCloudFrame" gltf-model="#PiFrame"
+                scale="0.2 0.2 0.2" rotation="90 0 0" position="0 0 0"></a-entity>
+
+              <a-entity id="_piCloudRpis" label-meshes click-handler class="collidable"
+                gltf-model="#PiRpis" scale="0.2 0.2 0.2" rotation="90 0 0" position="0 0 0"></a-entity>
+
+            </a-entity>
+
+            <a-sky radius="1.6" src="#sky"></a-sky>
+
+            <a-entity camera rotation="0 90 0" look-controls="enabled:false"
+              orbit-controls="target: 0 0 0;
+                              minDistance: 0.3;
+                              maxDistance: 0.3;
+                              initialPosition: 0 0 0.3;
+                              dampingFactor: 0.05;
+                              minAzimuthAngle: -45;
+                              maxAzimuthAngle: 45;
+                              minPolarAngle: 30;
+                              maxPolarAngle: 120;
+                              rotateSpeed: 5"></a-entity>
+
+          </a-scene>
+
+        </div>
+      </div>
+
+      <label class="pure-overlay" for="pure-toggle-left" data-overlay="left"></label>
+    </div>
+  </body>
+</html>
